@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.extra;
 
 import com.qualcomm.hardware.limelightvision.Limelight3A;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
@@ -11,7 +11,7 @@ import com.qualcomm.robotcore.hardware.Servo;
 
 @Disabled
 @Autonomous
-public class BANEAuton1 extends LinearOpMode {
+public class BANEAuton2 extends LinearOpMode {
 
 
     private Limelight3A limelight;
@@ -61,8 +61,8 @@ public class BANEAuton1 extends LinearOpMode {
     }
 
     public void SpinFlywheel(){
-        flywheelLeft.setPower(0.5);
-        flywheelRight.setPower(0.5);
+        flywheelLeft.setPower(0.55);
+        flywheelRight.setPower(0.55);
 
     }
 
@@ -165,7 +165,7 @@ public class BANEAuton1 extends LinearOpMode {
         sleep(850);
         DriveStop();
         ThreeBallShoot();
-        TurnLeft();
+        TurnRight();
         sleep(500);
         DriveStop();
         intakeRun();
@@ -177,7 +177,7 @@ public class BANEAuton1 extends LinearOpMode {
         DriveBackward();
         sleep(700);
         DriveStop();
-        TurnRight();
+        TurnLeft();
         sleep(650);
         DriveStop();
         intakeStop();
