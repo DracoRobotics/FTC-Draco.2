@@ -43,7 +43,7 @@ public class BANECompOld extends OpMode {
     private enum ShooterState { IDLE, SPINNING_UP, OPEN_GATE, FEEDING, CLOSE_GATE }
     private ShooterState shooterState = ShooterState.IDLE;
 
-    private static final double FEED_TIME = 3.5;
+    private static final double FEED_TIME = 3;
     private boolean shootButtonLast = false;
     double flywheelRPM = 0; // Global scope for telemetry access
     double flywheelSpeedUpTime = 0.6;
@@ -153,7 +153,7 @@ public class BANECompOld extends OpMode {
             double ty = result.getTy();
             double totalAngle = Math.toRadians(45 + ty);
             double X = (42 - 16) / Math.tan(totalAngle);
-            flywheelRPM = (30 * X) / (0.205  * Math.PI * Math.cos(Math.toRadians(45)));
+            flywheelRPM = (30 * X) / (0.195  * Math.PI * Math.cos(Math.toRadians(45)));
         }
 
         // 2. Continuous Velocity Update

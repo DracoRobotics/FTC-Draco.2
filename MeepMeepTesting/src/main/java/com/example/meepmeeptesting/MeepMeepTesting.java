@@ -36,22 +36,24 @@ public class MeepMeepTesting {
 
 //        Tartus
         myBot.runAction(
-                    myBot.getDrive().actionBuilder(new Pose2d(-57, 57, Math.toRadians(135)))
-                    .strafeTo(new Vector2d(-16, 16))
-                    .waitSeconds(6)
-                            .splineTo(new Vector2d(36, 34), Math.toRadians(-270))
-                    .lineToY(60)
-                    .lineToY(30)
-                .splineTo(new Vector2d(-16, 16), Math.toRadians(-45))
-                .turnTo(Math.toRadians(-225))
-                .waitSeconds(6)
-                            .splineTo(new Vector2d(12, 34), Math.toRadians(-270))
-                .lineToY(60)
-                .lineToY(30)
-                .splineTo(new Vector2d(-16,16), Math.toRadians(-45))
-                .turnTo(Math.toRadians(-225))
-                .waitSeconds(5.9)
-                            .splineTo(new Vector2d(38, 33), Math.toRadians(-270))
+                    myBot.getDrive().actionBuilder(new Pose2d(-50, -50, Math.toRadians(225)))
+                            .strafeTo(new Vector2d(-16, -16))
+                            .turnTo(270)
+
+                            .splineTo(new Vector2d(39, -34), Math.toRadians(270))
+                            .lineToY(-60)
+                            .lineToY(-40)
+
+                            .splineTo(new Vector2d(-16, -16), Math.toRadians(45))
+                            .turnTo(Math.toRadians(225))
+
+
+                            .splineTo(new Vector2d(15, -34), Math.toRadians(270))
+                            .lineToY(-60)
+                            .lineToY(-40)
+
+                            .splineTo(new Vector2d(-16,-16), Math.toRadians(45))
+                            .turnTo(Math.toRadians(225))
                 .build()
         );
 
