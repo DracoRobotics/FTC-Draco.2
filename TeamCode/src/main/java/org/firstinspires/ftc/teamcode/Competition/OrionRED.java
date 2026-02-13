@@ -65,7 +65,7 @@ public void IndexerClose(){
     public void ThreeBallShoot (){
         IndexerOpen();
         SpinFlywheel();
-        sleep(700);
+        sleep(900);
         intakeRun();
         sleep(4000);
         intakeStop();

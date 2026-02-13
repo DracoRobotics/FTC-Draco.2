@@ -43,7 +43,7 @@ public class BANECompOld extends OpMode {
     private enum ShooterState { IDLE, SPINNING_UP, OPEN_GATE, FEEDING, CLOSE_GATE }
     private ShooterState shooterState = ShooterState.IDLE;
 
-    private static final double FEED_TIME = 3.0;
+    private static final double FEED_TIME = 3.5;
     private boolean shootButtonLast = false;
     double flywheelRPM = 0; // Global scope for telemetry access
     double flywheelSpeedUpTime = 0.6;
