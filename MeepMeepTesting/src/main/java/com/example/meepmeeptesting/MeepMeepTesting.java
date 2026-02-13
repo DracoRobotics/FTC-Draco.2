@@ -38,24 +38,25 @@ public class MeepMeepTesting {
         myBot.runAction(
                     myBot.getDrive().actionBuilder(new Pose2d(-50, -50, Math.toRadians(225)))
 
-
                             .strafeTo(new Vector2d(-16, -16))
-                            .turnTo(Math.toRadians(270))
 
+                            .turnTo(270)
 
                             .splineTo(new Vector2d(39, -34), Math.toRadians(270))
-                            .lineToY(-60)
+                            .lineToY(-70)
                             .lineToY(-40)
 
-                            .splineTo(new Vector2d(-16, -16), Math.toRadians(45))
+                            .splineToConstantHeading(new Vector2d(-16, -16), Math.toRadians(180))
                             .turnTo(Math.toRadians(225))
+
 
                             .splineTo(new Vector2d(15, -34), Math.toRadians(270))
-                            .lineToY(-60)
+                            .lineToY(-70)
                             .lineToY(-40)
 
-                            .splineTo(new Vector2d(-16,-16), Math.toRadians(45))
+                            .splineToConstantHeading(new Vector2d(-16, -16), Math.toRadians(180))
                             .turnTo(Math.toRadians(225))
+
 
 //                            .strafeTo(new Vector2d(-16, -16))
 //                            .turnTo(270)

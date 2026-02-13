@@ -141,7 +141,7 @@ public class TartusBLUE extends LinearOpMode {
 
 
 
-        Pose2d beginPose = new Pose2d(new Vector2d(-55, -50), Math.toRadians(225));
+        Pose2d beginPose = new Pose2d(new Vector2d(-50, -50), Math.toRadians(225));
         MecanumDrive drive = new MecanumDrive(hardwareMap, beginPose);
 
 
@@ -149,25 +149,25 @@ public class TartusBLUE extends LinearOpMode {
         Action BANEAuton = drive.actionBuilder(beginPose)
                 .strafeTo(new Vector2d(-16, -16))
                 .stopAndAdd(new ThreeBallShoot())
-                .turnTo(Math.toRadians(270))
+                .turnTo(270)
 
-
-                .splineTo(new Vector2d(39, -34), Math.toRadians(270))
+                .splineTo(new Vector2d(41, -34), Math.toRadians(270))
                 .stopAndAdd(new IntakeOn())
-                .lineToY(-70)
+                .lineToY(-75)
                 .lineToY(-40)
 
-                .splineTo(new Vector2d(-16, -16), Math.toRadians(45))
+
+                .splineToConstantHeading(new Vector2d(-16, -16), Math.toRadians(180))
                 .turnTo(Math.toRadians(225))
                 .stopAndAdd(new IntakeOff())
                 .stopAndAdd(new ThreeBallShoot())
 
                 .splineTo(new Vector2d(15, -34), Math.toRadians(270))
                 .stopAndAdd(new IntakeOn())
-                .lineToY(-70)
+                .lineToY(-75)
                 .lineToY(-40)
 
-                .splineTo(new Vector2d(-16,-16), Math.toRadians(45))
+                .splineToConstantHeading(new Vector2d(-16, -16), Math.toRadians(180))
                 .turnTo(Math.toRadians(225))
                 .stopAndAdd(new IntakeOff())
                 .stopAndAdd(new ThreeBallShoot())
