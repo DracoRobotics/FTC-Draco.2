@@ -19,41 +19,41 @@ public class MeepMeepTesting {
                 .build();
 
 
-        myBot.runAction(
-                myBot.getDrive().actionBuilder(new Pose2d(-51, -52, Math.toRadians(225)))
-                        .strafeTo( new Vector2d(-15, -15))
-                        .turnTo(270)
-                        .splineTo(new Vector2d(12, -32), Math.toRadians(270))
-                        .lineToY(-60)
-                        .lineToY(-30)
-                        .splineTo( new Vector2d(-15, -15), Math.toRadians(45))
-                        .turnTo(270)
-                        .lineToY(-60)
-                        .build()
-        );
-
-
-
-////        Tartus
 //        myBot.runAction(
-//                    myBot.getDrive().actionBuilder(new Pose2d(-51, -52, Math.toRadians(225)))
-//                    .strafeTo(new Vector2d(-15, -15))
-//                    .waitSeconds(6)
-//                    .splineTo(new Vector2d(35, -30), Math.toRadians(270))
-//                    .lineToY(-60)
-//                    .lineToY(-30)
-//                .splineTo(new Vector2d(-15, -15), Math.toRadians(45))
-//                .turnTo(Math.toRadians(225))
-//                .waitSeconds(6)
-//                .splineTo(new Vector2d(11.9, -30), Math.toRadians(270))
-//                .lineToY(-60)
-//                .lineToY(-30)
-//                .splineTo(new Vector2d(-15,-15), Math.toRadians(45))
-//                .turnTo(Math.toRadians(225))
-//                .waitSeconds(5.9
-//                )
-//                .build()
+//                myBot.getDrive().actionBuilder(new Pose2d(-51, -52, Math.toRadians(225)))
+//                        .strafeTo( new Vector2d(-15, -15))
+//                        .turnTo(270)
+//                        .splineTo(new Vector2d(12, -32), Math.toRadians(270))
+//                        .lineToY(-60)
+//                        .lineToY(-30)
+//                        .splineTo( new Vector2d(-15, -15), Math.toRadians(45))
+//                        .turnTo(270)
+//                        .lineToY(-60)
+//                        .build()
 //        );
+
+
+
+//        Tartus
+        myBot.runAction(
+                    myBot.getDrive().actionBuilder(new Pose2d(-51, -52, Math.toRadians(225)))
+                    .strafeTo(new Vector2d(-15, -15))
+                    .waitSeconds(6)
+                    .splineTo(new Vector2d(35, -30), Math.toRadians(270))
+                    .lineToY(-60)
+                    .lineToY(-30)
+                .splineTo(new Vector2d(-15, -15), Math.toRadians(45))
+                .turnTo(Math.toRadians(225))
+                .waitSeconds(6)
+                .splineTo(new Vector2d(11.9, -30), Math.toRadians(270))
+                .lineToY(-60)
+                .lineToY(-30)
+                .splineTo(new Vector2d(-15,-15), Math.toRadians(45))
+                .turnTo(Math.toRadians(225))
+                .waitSeconds(5.9)
+                            .splineTo(new Vector2d(38, -33), Math.toRadians(270))
+                .build()
+        );
 
 
         meepMeep.setBackground(MeepMeep.Background.FIELD_DECODE_JUICE_BLACK)
