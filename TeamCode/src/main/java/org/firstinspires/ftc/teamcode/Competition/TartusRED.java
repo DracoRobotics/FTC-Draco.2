@@ -10,19 +10,22 @@ import com.acmerobotics.roadrunner.ftc.Actions;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.teamcode.Configuration.MecanumDrive;
 
 
 @Autonomous
-public class OrionRED extends LinearOpMode {
+public class TartusRED extends LinearOpMode {
 
 
     // ===== Hardware =====
     DcMotor intakeMotor;
-    DcMotor flywheelLeft, flywheelRight;
+    DcMotorEx flywheelLeft, flywheelRight;
     Servo indexer;
+
+
 
 
     // ===== Shooter State Machine =====
@@ -34,6 +37,10 @@ public class OrionRED extends LinearOpMode {
     public void intakeStop() {
         intakeMotor.setPower(0);
     }
+    public void Outtake() {
+        intakeMotor.setPower(1);
+    }
+
 
 
 
@@ -41,8 +48,8 @@ public class OrionRED extends LinearOpMode {
 
 
     public void SpinFlywheel(){
-        flywheelLeft.setPower(0.6);
-        flywheelRight.setPower(0.6);
+        flywheelLeft.setVelocity(3000);
+        flywheelRight.setVelocity(3000);
 
 
     }
@@ -58,16 +65,16 @@ public class OrionRED extends LinearOpMode {
         indexer.setPosition(0.8);
 
     }
-public void IndexerClose(){
+    public void IndexerClose(){
         indexer.setPosition(0.5);
-}
+    }
 
     public void ThreeBallShoot (){
         IndexerOpen();
         SpinFlywheel();
         sleep(900);
         intakeRun();
-        sleep(4000);
+        sleep(3000);
         intakeStop();
         IndexerClose();
         StopFlywheel();
@@ -106,56 +113,76 @@ public void IndexerClose(){
 
 
         intakeMotor = hardwareMap.get(DcMotor.class, "intake");
-        flywheelLeft = hardwareMap.get(DcMotor.class, "flywheelLeft");
-        flywheelRight = hardwareMap.get(DcMotor.class, "flywheelRight");
+        flywheelLeft = hardwareMap.get(DcMotorEx.class, "flywheelLeft");
+        flywheelRight = hardwareMap.get(DcMotorEx.class, "flywheelRight");
         indexer = hardwareMap.get(Servo.class, "indexer");
 
 
         flywheelLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
         flywheelRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
 
+        // Use Encoder mode for setVelocity
+        flywheelLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        flywheelRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
-        Pose2d beginPose = new Pose2d(new Vector2d( 65, 12), Math.toRadians(180));
+        // PIDF Tuning for goBilda 6000 RPM Motors
+// P = 12.0 (The 'kick' to reach speed)
+// I = 3.0  (Helps stay at speed, but keep low to prevent windup)
+// D = 0.0  (Usually not needed for flywheels)
+// F = 12.8 (This is the 'cruise control' base power)
+        // Recommended coefficients for a 6000 RPM Flywheel
+        double F_COEFF = 6;
+        double P_COEFF = 0.000000000001; // Start here and increase if recovery is slow
+        double I_COEFF = 0;  // Keep very small
+        double D_COEFF = 0.0;
+
+        flywheelLeft.setVelocityPIDFCoefficients(P_COEFF, I_COEFF, D_COEFF, F_COEFF);
+        flywheelRight.setVelocityPIDFCoefficients(P_COEFF, I_COEFF, D_COEFF, F_COEFF);
+
+
+
+        Pose2d beginPose = new Pose2d(new Vector2d(-57, 57), Math.toRadians(180));
         MecanumDrive drive = new MecanumDrive(hardwareMap, beginPose);
 
 
         // ===== TRAJECTORY (UNCHANGED) =====
         Action BANEAuton = drive.actionBuilder(beginPose)
-                .splineToConstantHeading(new Vector2d(-16, 16), Math.toRadians(180))
-                .turnTo(Math.toRadians(-225))
+                .strafeTo(new Vector2d(-16, 16))
+                .turnTo(Math.toRadians(225))
                 .stopAndAdd(new ThreeBallShoot())
 
-                .splineTo(new Vector2d(36, 34), Math.toRadians(-270))
+                .splineTo(new Vector2d(39, 34), Math.toRadians(270))
                 .stopAndAdd(new IntakeOn())
-                .lineToY(65)
-                .lineToY(35)
+                .lineToY(60)
+                .lineToY(40)
 
-                .splineToConstantHeading(new Vector2d(-16, 16), Math.toRadians(180))
-                .turnTo(Math.toRadians(-225))
+                .splineTo(new Vector2d(-16, 16), Math.toRadians(-45))
+                .turnTo(Math.toRadians(225))
                 .stopAndAdd(new IntakeOff())
                 .stopAndAdd(new ThreeBallShoot())
 
-                .splineTo(new Vector2d(12, 34), Math.toRadians(-270))
+                .splineTo(new Vector2d(15, 34), Math.toRadians(-270))
                 .stopAndAdd(new IntakeOn())
-                .lineToY(65)
-                .lineToY(35)
+                .lineToY(60)
+                .lineToY(40)
 
-                .splineToConstantHeading(new Vector2d(-16, 16), Math.toRadians(180))
-                .turnTo(Math.toRadians(-225))
+                .splineTo(new Vector2d(-16,16), Math.toRadians(-45))
+                .turnTo(Math.toRadians(225))
                 .stopAndAdd(new IntakeOff())
                 .stopAndAdd(new ThreeBallShoot())
 
-//                .splineTo(new Vector2d(-15, 34), Math.toRadians(-270))
+//                .splineTo(new Vector2d(-7, -34), Math.toRadians(270))
 //                .stopAndAdd(new IntakeOn())
-//                .lineToY(60)
-//                .lineToY(35)
-//
-//                .splineToConstantHeading(new Vector2d(-15, 15), Math.toRadians(180))
-//                .turnTo(Math.toRadians(-225))
+//                .lineToY(-60)
+//                .lineToY(-40)
+
+//                .splineToConstantHeading(new Vector2d(-15, -15), Math.toRadians(180))
+//                .turnTo(Math.toRadians(230))
 //                .stopAndAdd(new IntakeOff())
 
 
-                .splineTo(new Vector2d(38, 33), Math.toRadians(-270))
+                .splineTo(new Vector2d(38, 33), Math.toRadians(270))
+
                 .build();
 
 
