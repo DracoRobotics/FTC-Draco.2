@@ -147,7 +147,7 @@ public class TartusBLUE extends LinearOpMode {
 
         // ===== TRAJECTORY (UNCHANGED) =====
         Action BANEAuton = drive.actionBuilder(beginPose)
-                .strafeTo(new Vector2d(-16, -16))
+                .splineTo(new Vector2d(-16, -16), Math.toRadians(270))
                 .stopAndAdd(new ThreeBallShoot())
                 .turnTo(Math.toRadians(270))
 
