@@ -36,7 +36,7 @@ public class MeepMeepTesting {
 
 //        Tartus
         myBot.runAction(
-                    myBot.getDrive().actionBuilder(new Pose2d(-51, -52, Math.toRadians(225)))
+                    myBot.getDrive().actionBuilder(new Pose2d(-57, -57, Math.toRadians(225)))
                     .strafeTo(new Vector2d(-15, -15))
                     .waitSeconds(6)
                     .splineTo(new Vector2d(35, -30), Math.toRadians(270))
