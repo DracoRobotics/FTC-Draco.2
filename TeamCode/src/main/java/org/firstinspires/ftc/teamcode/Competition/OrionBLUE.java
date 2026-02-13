@@ -153,7 +153,7 @@ public class OrionBLUE extends LinearOpMode {
 
                 .splineTo(new Vector2d(39, -34), Math.toRadians(270))
                 .stopAndAdd(new IntakeOn())
-                .lineToY(-60)
+                .lineToY(-70)
                 .lineToY(-40)
 
                 .splineToConstantHeading(new Vector2d(-16, -16), Math.toRadians(180))
@@ -163,7 +163,7 @@ public class OrionBLUE extends LinearOpMode {
 
                 .splineTo(new Vector2d(15, -34), Math.toRadians(270))
                 .stopAndAdd(new IntakeOn())
-                .lineToY(-60)
+                .lineToY(-70)
                 .lineToY(-40)
 
                 .splineToConstantHeading(new Vector2d(-16, -16), Math.toRadians(180))

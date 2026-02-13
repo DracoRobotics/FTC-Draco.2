@@ -141,7 +141,7 @@ public class TartusRED extends LinearOpMode {
 
 
 
-        Pose2d beginPose = new Pose2d(new Vector2d(-57, 57), Math.toRadians(180));
+        Pose2d beginPose = new Pose2d(new Vector2d(-50, 50), Math.toRadians(180));
         MecanumDrive drive = new MecanumDrive(hardwareMap, beginPose);
 
 
