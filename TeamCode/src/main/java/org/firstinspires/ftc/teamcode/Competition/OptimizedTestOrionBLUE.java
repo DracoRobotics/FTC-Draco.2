@@ -1,6 +1,5 @@
 package org.firstinspires.ftc.teamcode.Competition;
 
-
 import com.acmerobotics.roadrunner.Action;
 import com.acmerobotics.roadrunner.InstantFunction;
 import com.acmerobotics.roadrunner.Pose2d;
@@ -15,178 +14,147 @@ import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.teamcode.Configuration.MecanumDrive;
 
-
 @Autonomous
-public class TartusBLUE extends LinearOpMode {
-
+public class OptimizedTestOrionBLUE extends LinearOpMode {
 
     // ===== Hardware =====
     DcMotor intakeMotor;
     DcMotorEx flywheelLeft, flywheelRight;
     Servo indexer;
 
+    // ===== Intake =====
+    public void intakeRun() { intakeMotor.setPower(-1); }
+    public void intakeStop() { intakeMotor.setPower(0); }
+    public void Outtake() { intakeMotor.setPower(1); }
 
-
-
-    // ===== Shooter State Machine =====
-    public void intakeRun() {
-        intakeMotor.setPower(-1);
+    // ===== Flywheel =====
+    public void SpinFlywheel() {
+        flywheelLeft.setVelocity(3000);
+        flywheelRight.setVelocity(3000);
     }
 
-
-    public void intakeStop() {
-        intakeMotor.setPower(0);
-    }
-    public void Outtake() {
-        intakeMotor.setPower(1);
-    }
-
-
-
-
-
-
-
-    public void SpinFlywheel(){
-        flywheelLeft.setVelocity(3400);
-        flywheelRight.setVelocity(3400);
-
-
-    }
-
-
-    public void StopFlywheel (){
+    public void StopFlywheel() {
         flywheelLeft.setPower(0);
         flywheelRight.setPower(0);
     }
 
+    // ===== Indexer =====
+    public void IndexerOpen() { indexer.setPosition(0.8); }
+    public void IndexerClose() { indexer.setPosition(0.5); }
 
-    public void IndexerOpen(){
-        indexer.setPosition(0.8);
-
-    }
-    public void IndexerClose(){
-        indexer.setPosition(0.5);
-    }
-
-    public void ThreeBallShoot (){
+    // ===== Improved 3-Ball Shoot =====
+    public void ThreeBallShootSequence() {
         IndexerOpen();
-        SpinFlywheel();
-        sleep(900);
-        intakeRun();
-        sleep(3000);
-        intakeStop();
+        sleep(600);  // reduced spin stabilization
+
+        // Loop to feed 3 balls reliably
+        for (int i = 0; i < 3; i++) {
+            intakeRun();
+            sleep(500); // run intake in short bursts
+            intakeStop();
+            sleep(200); // give balls time to fully pass
+        }
+
         IndexerClose();
         StopFlywheel();
     }
 
-
-
-
     // ===== Road Runner Instant Actions =====
-    public class ThreeBallShoot implements InstantFunction {
+    public class SpinUp implements InstantFunction {
         @Override
-        public void run() {
-            ThreeBallShoot();
-        }
+        public void run() { SpinFlywheel(); }
     }
 
+    public class ShootCycle implements InstantFunction {
+        @Override
+        public void run() { ThreeBallShootSequence(); }
+    }
 
     public class IntakeOn implements InstantFunction {
         @Override
-        public void run() {
-            intakeMotor.setPower(-1);
-        }
+        public void run() { intakeRun(); }
     }
-
 
     public class IntakeOff implements InstantFunction {
         @Override
-        public void run() {
-            intakeMotor.setPower(0);
-        }
+        public void run() { intakeStop(); }
     }
-
 
     @Override
     public void runOpMode() {
-
 
         intakeMotor = hardwareMap.get(DcMotor.class, "intake");
         flywheelLeft = hardwareMap.get(DcMotorEx.class, "flywheelLeft");
         flywheelRight = hardwareMap.get(DcMotorEx.class, "flywheelRight");
         indexer = hardwareMap.get(Servo.class, "indexer");
 
-
         flywheelLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
         flywheelRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
 
-        // Use Encoder mode for setVelocity
         flywheelLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         flywheelRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
-        // PIDF Tuning for goBilda 6000 RPM Motors
-// P = 12.0 (The 'kick' to reach speed)
-// I = 3.0  (Helps stay at speed, but keep low to prevent windup)
-// D = 0.0  (Usually not needed for flywheels)
-// F = 12.8 (This is the 'cruise control' base power)
-        // Recommended coefficients for a 6000 RPM Flywheel
+        // PIDF (unchanged)
         double F_COEFF = 6;
-        double P_COEFF = 0.000000000001; // Start here and increase if recovery is slow
-        double I_COEFF = 0;  // Keep very small
+        double P_COEFF = 0.000000000001;
+        double I_COEFF = 0;
         double D_COEFF = 0.0;
-
+                
         flywheelLeft.setVelocityPIDFCoefficients(P_COEFF, I_COEFF, D_COEFF, F_COEFF);
         flywheelRight.setVelocityPIDFCoefficients(P_COEFF, I_COEFF, D_COEFF, F_COEFF);
 
-        indexer.setPosition(0.5);
-
-
-        Pose2d beginPose = new Pose2d(new Vector2d(-50, -50), Math.toRadians(225));
+        Pose2d beginPose = new Pose2d(new Vector2d(65, -12), Math.toRadians(180));
         MecanumDrive drive = new MecanumDrive(hardwareMap, beginPose);
 
+        // ===== TRAJECTORY (UNCHANGED PATH) =====
+        Action BANEAuton = drive.actionBuilder(beginPose)
 
-        // ===== TRAJECTORY (UNCHANGED) =====
-        Action BANEAutonRed = drive.actionBuilder(beginPose)
-                .stopAndAdd(new IntakeOn())
-                .strafeTo(new Vector2d(-16, -16))
-                .stopAndAdd(new ThreeBallShoot())
-                .turnTo(Math.toRadians(270))
+                .splineToConstantHeading(new Vector2d(-16, -16), Math.toRadians(180))
+                .stopAndAdd(new SpinUp())
+                .turnTo(Math.toRadians(225))
+                .stopAndAdd(new ShootCycle())
 
-                .splineTo(new Vector2d(-4, -34), Math.toRadians(270))
+                .splineTo(new Vector2d(39, -34), Math.toRadians(270))
                 .stopAndAdd(new IntakeOn())
-                .lineToY(-77)
-                .waitSeconds(0.500)
+                .lineToY(-70)
                 .lineToY(-40)
 
                 .splineToConstantHeading(new Vector2d(-16, -16), Math.toRadians(180))
+                .stopAndAdd(new SpinUp())
                 .turnTo(Math.toRadians(225))
                 .stopAndAdd(new IntakeOff())
-                .stopAndAdd(new ThreeBallShoot())
+                .stopAndAdd(new ShootCycle())
 
                 .splineTo(new Vector2d(15, -34), Math.toRadians(270))
                 .stopAndAdd(new IntakeOn())
-                .lineToY(-80)
+                .lineToY(-70)
                 .lineToY(-40)
 
                 .splineToConstantHeading(new Vector2d(-16, -16), Math.toRadians(180))
+                .stopAndAdd(new SpinUp())
                 .turnTo(Math.toRadians(225))
                 .stopAndAdd(new IntakeOff())
-                .stopAndAdd(new ThreeBallShoot())
+                .stopAndAdd(new ShootCycle())
 
-                .splineTo(new Vector2d(-7, -35), Math.toRadians(270))
+                .splineTo(new Vector2d(-7, -34), Math.toRadians(270))
+                .stopAndAdd(new IntakeOn())
+                .lineToY(-70)
+                .lineToY(-40)
+
+                .splineToConstantHeading(new Vector2d(-16, -16), Math.toRadians(180))
+                .stopAndAdd(new SpinUp())
+                .turnTo(Math.toRadians(225))
+                .stopAndAdd(new IntakeOff())
+                .stopAndAdd(new ShootCycle())
+
+                .splineTo(new Vector2d(38, -33), Math.toRadians(270))
 
                 .build();
-
 
         waitForStart();
 
         Actions.runBlocking(new SequentialAction(
-                BANEAutonRed
+                BANEAuton
         ));
-
     }
 }
-
-
-

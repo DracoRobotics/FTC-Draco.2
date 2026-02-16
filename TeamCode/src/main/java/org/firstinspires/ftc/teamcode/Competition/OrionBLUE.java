@@ -48,8 +48,8 @@ public class OrionBLUE extends LinearOpMode {
 
 
     public void SpinFlywheel(){
-        flywheelLeft.setVelocity(3000);
-        flywheelRight.setVelocity(3000);
+        flywheelLeft.setVelocity(3300);
+        flywheelRight.setVelocity(3300);
 
 
     }
@@ -125,6 +125,10 @@ public class OrionBLUE extends LinearOpMode {
         flywheelLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         flywheelRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
+
+
+
+
         // PIDF Tuning for goBilda 6000 RPM Motors
 // P = 12.0 (The 'kick' to reach speed)
 // I = 3.0  (Helps stay at speed, but keep low to prevent windup)
@@ -144,9 +148,12 @@ public class OrionBLUE extends LinearOpMode {
         Pose2d beginPose = new Pose2d(new Vector2d(65, -12), Math.toRadians(180));
         MecanumDrive drive = new MecanumDrive(hardwareMap, beginPose);
 
+        indexer.setPosition(0.5);
+
 
         // ===== TRAJECTORY (UNCHANGED) =====
         Action BANEAuton = drive.actionBuilder(beginPose)
+
                 .splineToConstantHeading(new Vector2d(-16, -16), Math.toRadians(180))
                 .turnTo(Math.toRadians(225))
                 .stopAndAdd(new ThreeBallShoot())
@@ -154,7 +161,7 @@ public class OrionBLUE extends LinearOpMode {
 
                 .splineTo(new Vector2d(39, -34), Math.toRadians(270))
                 .stopAndAdd(new IntakeOn())
-                .lineToY(-70)
+                .lineToY(-75)
                 .lineToY(-40)
 
                 .splineToConstantHeading(new Vector2d(-16, -16), Math.toRadians(180))

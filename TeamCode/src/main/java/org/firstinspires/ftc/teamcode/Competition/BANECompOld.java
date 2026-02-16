@@ -43,7 +43,7 @@ public class BANECompOld extends OpMode {
     private enum ShooterState { IDLE, SPINNING_UP, OPEN_GATE, FEEDING, CLOSE_GATE }
     private ShooterState shooterState = ShooterState.IDLE;
 
-    private static final double FEED_TIME = 3;
+    private static final double FEED_TIME = 4;
     private boolean shootButtonLast = false;
     double flywheelRPM = 0; // Global scope for telemetry access
     double flywheelSpeedUpTime = 0.6;
@@ -137,7 +137,7 @@ public class BANECompOld extends OpMode {
 
     }
 
-    public void handleShootButton() { 
+    public void handleShootButton() {
         boolean shoot = gamepad1.cross;
         if (shoot && !shootButtonLast && shooterState == ShooterState.IDLE) {
             shooterState = ShooterState.SPINNING_UP;
@@ -153,7 +153,7 @@ public class BANECompOld extends OpMode {
             double ty = result.getTy();
             double totalAngle = Math.toRadians(45 + ty);
             double X = (42 - 16) / Math.tan(totalAngle);
-            flywheelRPM = (30 * X) / (0.195  * Math.PI * Math.cos(Math.toRadians(45)));
+            flywheelRPM = (30 * X) / (0.200  * Math.PI * Math.cos(Math.toRadians(45)));
         }
 
         // 2. Continuous Velocity Update
@@ -218,21 +218,47 @@ public class BANECompOld extends OpMode {
     }
 
     private void updateTurret() {
+
         if (gamepad1.dpad_left) headingLockEnabled = true;
         if (gamepad1.dpad_right) headingLockEnabled = false;
 
         limelightResult = limelight.getLatestResult();
-        if (!headingLockEnabled || limelightResult == null || !limelightResult.isValid()) {
-            turret.setPower(0);
-            integralSum = 0;
-            return;
+
+        double errorTicks;
+
+        // =========================
+        // AUTO LOCK MODE
+        // =========================
+        if (headingLockEnabled && limelightResult != null && limelightResult.isValid()) {
+
+            double rawTx = limelightResult.getTx();
+            double tx = 0.25 * rawTx + 0.75 * lastFilteredTx;
+            lastFilteredTx = tx;
+
+            errorTicks = tx * TICKS_PER_DEGREE;
         }
 
-        double rawTx = limelightResult.getTx();
-        double tx = 0.25 * rawTx + 0.75 * lastFilteredTx;
-        lastFilteredTx = tx;
+        // =========================
+        // RETURN TO CENTER MODE
+        // =========================
+        else {
 
-        double errorTicks = tx * TICKS_PER_DEGREE;
+            // Center is encoder position 0
+            errorTicks = turret.getCurrentPosition();
+
+            // Optional deadband so it doesn't twitch at center
+            if (Math.abs(errorTicks) < 5) {
+                turret.setPower(0);
+                integralSum = 0;
+                lastError = 0;
+                return;
+            }
+        }
+
+        // =========================
+        // PID CALCULATION (SAME FOR BOTH MODES)
+        // =========================
+
         long now = System.currentTimeMillis();
         double dt = Math.max((now - lastTimeMs) / 1000.0, 0.02);
         lastTimeMs = now;
@@ -241,9 +267,12 @@ public class BANECompOld extends OpMode {
         double derivative = (errorTicks - lastError) / dt;
 
         double power = Kp * errorTicks + Ki * integralSum + Kd * derivative;
+
         turret.setPower(Range.clip(power, -MAX_TURN_POWER, MAX_TURN_POWER));
+
         lastError = errorTicks;
     }
+
 
     private void updateDrive() {
         double y = -gamepad1.left_stick_y;
@@ -278,6 +307,8 @@ public class BANECompOld extends OpMode {
         telemetry.addData("Target RPM", "%.2f", flywheelRPM);
         telemetry.addData("Actual RPM", "%.2f", (currentVel * 60.0) / 28.0);
         telemetry.addData("Shooter State", shooterState);
+        telemetry.addData("AutoLock ON?", headingLockEnabled);
+        telemetry.addData("Tag Detected?", visionLock);
         telemetry.update();
     }
 

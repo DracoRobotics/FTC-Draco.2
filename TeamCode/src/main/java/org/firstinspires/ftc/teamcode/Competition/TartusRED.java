@@ -48,8 +48,8 @@ public class TartusRED extends LinearOpMode {
 
 
     public void SpinFlywheel(){
-        flywheelLeft.setVelocity(3000);
-        flywheelRight.setVelocity(3000);
+        flywheelLeft.setVelocity(3400);
+        flywheelRight.setVelocity(3400);
 
 
     }
@@ -139,48 +139,41 @@ public class TartusRED extends LinearOpMode {
         flywheelLeft.setVelocityPIDFCoefficients(P_COEFF, I_COEFF, D_COEFF, F_COEFF);
         flywheelRight.setVelocityPIDFCoefficients(P_COEFF, I_COEFF, D_COEFF, F_COEFF);
 
+        indexer.setPosition(0.5);
 
 
-        Pose2d beginPose = new Pose2d(new Vector2d(-50, 50), Math.toRadians(180));
+        Pose2d beginPose = new Pose2d(new Vector2d(-50, 50), Math.toRadians(-225));
         MecanumDrive drive = new MecanumDrive(hardwareMap, beginPose);
 
 
         // ===== TRAJECTORY (UNCHANGED) =====
         Action BANEAuton = drive.actionBuilder(beginPose)
+                .stopAndAdd(new IntakeOn())
                 .strafeTo(new Vector2d(-16, 16))
                 .stopAndAdd(new ThreeBallShoot())
-                .turnTo(Math.toRadians(-270))
-
-                .splineTo(new Vector2d(41, 34), Math.toRadians(-270))
+                .turnTo(-270)
+                .splineTo(new Vector2d(-4, 34), Math.toRadians(-270))
                 .stopAndAdd(new IntakeOn())
                 .lineToY(75)
-                .lineToY(35)
+                .lineToY(40)
 
-                .splineToConstantHeading(new Vector2d(-16, 16), Math.toRadians(180))
+
+                .splineToConstantHeading(new Vector2d(-16, 16), Math.toRadians(-180))
                 .turnTo(Math.toRadians(-225))
                 .stopAndAdd(new IntakeOff())
                 .stopAndAdd(new ThreeBallShoot())
 
-                .splineTo(new Vector2d(12, 34), Math.toRadians(-270))
+                .splineTo(new Vector2d(15, 34), Math.toRadians(-270))
                 .stopAndAdd(new IntakeOn())
-                .lineToY(75)
-                .lineToY(35)
+                .lineToY(80)
+                .lineToY(40)
 
-                .splineToConstantHeading(new Vector2d(-16, 16), Math.toRadians(180))
+                .splineToConstantHeading(new Vector2d(-16, 16), Math.toRadians(-180))
                 .turnTo(Math.toRadians(-225))
                 .stopAndAdd(new IntakeOff())
                 .stopAndAdd(new ThreeBallShoot())
-//                .splineTo(new Vector2d(-7, -34), Math.toRadians(270))
-//                .stopAndAdd(new IntakeOn())
-//                .lineToY(-60)
-//                .lineToY(-40)
 
-//                .splineToConstantHeading(new Vector2d(-15, -15), Math.toRadians(180))
-//                .turnTo(Math.toRadians(230))
-//                .stopAndAdd(new IntakeOff())
-
-
-                .splineTo(new Vector2d(38, 33), Math.toRadians(270))
+                .splineTo(new Vector2d(-7, 35), Math.toRadians(-270))
 
                 .build();
 
@@ -191,6 +184,7 @@ public class TartusRED extends LinearOpMode {
         Actions.runBlocking(new SequentialAction(
                 BANEAuton
         ));
+
     }
 }
 
