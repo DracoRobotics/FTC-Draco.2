@@ -127,12 +127,15 @@ public class BANECompOld extends OpMode {
         updateShooter();
         updateIndexer();
         updateTurret();
-        updateDrive();
         updateManualIntake();
         updateTelemetry();
 
 
-
+        if (gamepad1.dpad_down) {
+            updateTankDrive();
+        } else {
+            updateMecanumDrive();
+        }
 
 
     }
@@ -274,7 +277,7 @@ public class BANECompOld extends OpMode {
     }
 
 
-    private void updateDrive() {
+    private void updateMecanumDrive() {
         double y = -gamepad1.left_stick_y;
         double x = gamepad1.left_stick_x;
         double rx = gamepad1.right_stick_x;
@@ -288,6 +291,13 @@ public class BANECompOld extends OpMode {
         rightFrontDrive.setPower(rf);
         leftBackDrive.setPower(lb);
         rightBackDrive.setPower(rb);
+    }
+
+    private void updateTankDrive(){
+        leftFrontDrive.setPower(gamepad1.left_stick_y);
+        rightFrontDrive.setPower(gamepad1.right_stick_y);
+        leftBackDrive.setPower(gamepad1.left_stick_y);
+        rightBackDrive.setPower(gamepad1.right_stick_y);
     }
 
     private void updateManualIntake() {
