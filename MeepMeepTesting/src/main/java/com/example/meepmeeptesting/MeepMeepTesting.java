@@ -36,24 +36,16 @@ public class MeepMeepTesting {
 
 //        Tartus
         myBot.runAction(
-                    myBot.getDrive().actionBuilder(new Pose2d(-50, -50, Math.toRadians(225)))
-                            .strafeTo(new Vector2d(-16, -16))
-                            .turnTo(270)
-
-                            .splineTo(new Vector2d(39, -34), Math.toRadians(270))
-                            .lineToY(-60)
-                            .lineToY(-40)
-
-                            .splineTo(new Vector2d(-16, -16), Math.toRadians(45))
-                            .turnTo(Math.toRadians(225))
-
+                    myBot.getDrive().actionBuilder(new Pose2d(-60, 0, Math.toRadians(180)))
+                            .strafeTo(new Vector2d(-50, 0))
+                            .turnTo(Math.toRadians(250))
 
                             .splineTo(new Vector2d(15, -34), Math.toRadians(270))
                             .lineToY(-60)
                             .lineToY(-40)
 
-                            .splineTo(new Vector2d(-16,-16), Math.toRadians(45))
-                            .turnTo(Math.toRadians(225))
+                            .splineTo(new Vector2d(-50,0), Math.toRadians(45))
+                            .turnTo(Math.toRadians(250))
                 .build()
         );
 
