@@ -72,7 +72,7 @@ public class OrionBLUE extends LinearOpMode {
     public void ThreeBallShoot (){
         IndexerOpen();
         SpinFlywheel();
-        sleep(900);
+        sleep(700);
         intakeRun();
         sleep(3000);
         intakeStop();
@@ -147,26 +147,26 @@ public class OrionBLUE extends LinearOpMode {
 
         // ===== TRAJECTORY (UNCHANGED) =====
         Action BANEAuton = drive.actionBuilder(beginPose)
-                .splineToConstantHeading(new Vector2d(-16, -16), Math.toRadians(180))
+                .splineToConstantHeading(new Vector2d(-15, -15), Math.toRadians(180))
                 .turnTo(Math.toRadians(225))
                 .stopAndAdd(new ThreeBallShoot())
 
-                .splineTo(new Vector2d(39, -34), Math.toRadians(270))
+                .splineTo(new Vector2d(36, -34), Math.toRadians(270))
                 .stopAndAdd(new IntakeOn())
                 .lineToY(-60)
                 .lineToY(-40)
 
-                .splineToConstantHeading(new Vector2d(-16, -16), Math.toRadians(180))
+                .splineToConstantHeading(new Vector2d(-15, -15), Math.toRadians(180))
                 .turnTo(Math.toRadians(225))
                 .stopAndAdd(new IntakeOff())
                 .stopAndAdd(new ThreeBallShoot())
 
-                .splineTo(new Vector2d(15, -34), Math.toRadians(270))
+                .splineTo(new Vector2d(12, -34), Math.toRadians(270))
                 .stopAndAdd(new IntakeOn())
                 .lineToY(-60)
                 .lineToY(-40)
 
-                .splineToConstantHeading(new Vector2d(-16, -16), Math.toRadians(180))
+                .splineToConstantHeading(new Vector2d(-15, -15), Math.toRadians(180))
                 .turnTo(Math.toRadians(225))
                 .stopAndAdd(new IntakeOff())
                 .stopAndAdd(new ThreeBallShoot())
