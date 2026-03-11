@@ -35,18 +35,18 @@ public class BANECompOld extends OpMode {
     private enum IndexerState { CLOSED, OPENING, OPEN, CLOSING }
     private IndexerState indexerState = IndexerState.CLOSED;
 
-    private static final double INDEXER_OPEN_POS = 0.8;
-    private static final double INDEXER_CLOSED_POS = 0.5;
+    private static final double INDEXER_OPEN_POS = 1;
+    private static final double INDEXER_CLOSED_POS = 0.8;
     private static final double INDEXER_MOVE_TIME = 0.25;
 
     // ---------------- SHOOTER ----------------
     private enum ShooterState { IDLE, SPINNING_UP, OPEN_GATE, FEEDING, CLOSE_GATE }
     private ShooterState shooterState = ShooterState.IDLE;
 
-    private static final double FEED_TIME = 4;
+    private static final double FEED_TIME = 2.5;
     private boolean shootButtonLast = false;
     double flywheelRPM = 0; // Global scope for telemetry access
-    double flywheelSpeedUpTime = 0.6;
+    double flywheelSpeedUpTime = 0.5;
 
     // ---------------- TURRET PID ----------------
     private static final double TICKS_PER_DEGREE = 9.744444;
@@ -156,10 +156,10 @@ public class BANECompOld extends OpMode {
             double ty = result.getTy();
             double totalAngle = Math.toRadians(45 + ty);
             double X = (42 - 16) / Math.tan(totalAngle);
-            flywheelRPM = (30 * X) / (0.200  * Math.PI * Math.cos(Math.toRadians(45)));
+            flywheelRPM = (30 * X) / (0.2000  * Math.PI * Math.cos(Math.toRadians(45)));
         }
 
-        // 2. Continuous Velocity Update
+        // 2. Continuous Velocity Update+
         double targetTicksPerSec = flywheelRPM;  //(flywheelRPM / 60.0) * 28;
         double currentRPM = (flywheelLeft.getVelocity());
 
@@ -294,10 +294,10 @@ public class BANECompOld extends OpMode {
     }
 
     private void updateTankDrive(){
-        leftFrontDrive.setPower(gamepad1.left_stick_y);
-        rightFrontDrive.setPower(gamepad1.right_stick_y);
-        leftBackDrive.setPower(gamepad1.left_stick_y);
-        rightBackDrive.setPower(gamepad1.right_stick_y);
+        leftFrontDrive.setPower(-gamepad1.left_stick_y);
+        rightFrontDrive.setPower(-gamepad1.right_stick_y);
+        leftBackDrive.setPower(-gamepad1.left_stick_y);
+        rightBackDrive.setPower(-gamepad1.right_stick_y);
     }
 
     private void updateManualIntake() {

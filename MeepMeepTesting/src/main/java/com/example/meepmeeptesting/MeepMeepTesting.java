@@ -36,32 +36,22 @@ public class MeepMeepTesting {
 
 //        Tartus
         myBot.runAction(
-                    myBot.getDrive().actionBuilder(new Pose2d(-55, -55, Math.toRadians(180)))
+                    myBot.getDrive().actionBuilder(new Pose2d(65, -12, Math.toRadians(180)))
 
-//
-                        .strafeTo(new Vector2d(-16, -16))
+                            .lineToX(-15)
+
+
                             .turnTo(Math.toRadians(270))
-
-                            .splineTo(new Vector2d(15, -34), Math.toRadians(270))
-                            .lineToY(-80)
-                            .lineToY(-40)
-
-
-                            .splineToConstantHeading(new Vector2d(-16, -16), Math.toRadians(180))
-                            .turnTo(Math.toRadians(225))
-
-                            .turnTo(270)
-                            .splineToConstantHeading(new Vector2d(4, -50), Math.toRadians(270))
-                            .lineToY(-60)
-                            .lineToY(-45)
-
-                            .splineToConstantHeading(new Vector2d(38 ,-23 ),Math.toRadians(180))
-                            .turnTo(Math.toRadians(270))
-                            .splineToConstantHeading(new Vector2d(38, -34), Math.toRadians(270))
-                            .lineToY(-80)
-                            .lineToY(-40)
+                            .splineToConstantHeading(new Vector2d(-12, -31), Math.toRadians(270))
+                            .lineToY(-70)
+                            .lineToY(-31)
+                            .splineToConstantHeading(new Vector2d(-15, -12), Math.toRadians(270))
 
 
+                            .splineToConstantHeading(new Vector2d(12, -31), Math.toRadians(270))
+                            .lineToY(-70)
+                            .lineToY(-31)
+                            .splineToConstantHeading(new Vector2d(-15, -12), Math.toRadians(270))
                             .build()
         );
 
