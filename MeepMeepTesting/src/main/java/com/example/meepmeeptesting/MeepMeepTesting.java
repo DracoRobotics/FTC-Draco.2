@@ -36,25 +36,23 @@ public class MeepMeepTesting {
 
 //        Tartus
         myBot.runAction(
-                    myBot.getDrive().actionBuilder(new Pose2d(-50, -50, Math.toRadians(225)))
-                            .strafeTo(new Vector2d(-16, -16))
-                            .turnTo(270)
+                    myBot.getDrive().actionBuilder(new Pose2d(65, -12, Math.toRadians(180)))
 
-                            .splineTo(new Vector2d(39, -34), Math.toRadians(270))
-                            .lineToY(-60)
-                            .lineToY(-40)
-
-                            .splineTo(new Vector2d(-16, -16), Math.toRadians(45))
-                            .turnTo(Math.toRadians(225))
+                            .lineToX(-15)
 
 
-                            .splineTo(new Vector2d(15, -34), Math.toRadians(270))
-                            .lineToY(-60)
-                            .lineToY(-40)
+                            .turnTo(Math.toRadians(270))
+                            .splineToConstantHeading(new Vector2d(-12, -31), Math.toRadians(270))
+                            .lineToY(-70)
+                            .lineToY(-31)
+                            .splineToConstantHeading(new Vector2d(-15, -12), Math.toRadians(270))
 
-                            .splineTo(new Vector2d(-16,-16), Math.toRadians(45))
-                            .turnTo(Math.toRadians(225))
-                .build()
+
+                            .splineToConstantHeading(new Vector2d(12, -31), Math.toRadians(270))
+                            .lineToY(-70)
+                            .lineToY(-31)
+                            .splineToConstantHeading(new Vector2d(-15, -12), Math.toRadians(270))
+                            .build()
         );
 
 
@@ -65,3 +63,5 @@ public class MeepMeepTesting {
                 .start();
     }
 }
+
+// Thryeo on

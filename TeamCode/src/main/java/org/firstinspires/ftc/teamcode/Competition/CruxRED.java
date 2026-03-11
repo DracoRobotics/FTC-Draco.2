@@ -17,13 +17,14 @@ import org.firstinspires.ftc.teamcode.Configuration.MecanumDrive;
 
 
 @Autonomous
-public class TartusBLUE extends LinearOpMode {
+public class CruxRED extends LinearOpMode {
 
 
     // ===== Hardware =====
     DcMotor intakeMotor;
     DcMotorEx flywheelLeft, flywheelRight;
     Servo indexer;
+    private DcMotor turret;
 
 
 
@@ -48,8 +49,8 @@ public class TartusBLUE extends LinearOpMode {
 
 
     public void SpinFlywheel(){
-        flywheelLeft.setVelocity(3400);
-        flywheelRight.setVelocity(3400);
+        flywheelLeft.setVelocity(4000);
+        flywheelRight.setVelocity(4000);
 
 
     }
@@ -118,12 +119,22 @@ public class TartusBLUE extends LinearOpMode {
         indexer = hardwareMap.get(Servo.class, "indexer");
 
 
+        turret = hardwareMap.get(DcMotor.class, "turret");
+        turret.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        turret.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        turret.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+
+
         flywheelLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
         flywheelRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
 
         // Use Encoder mode for setVelocity
         flywheelLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         flywheelRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+
+
+
 
         // PIDF Tuning for goBilda 6000 RPM Motors
 // P = 12.0 (The 'kick' to reach speed)
@@ -139,52 +150,38 @@ public class TartusBLUE extends LinearOpMode {
         flywheelLeft.setVelocityPIDFCoefficients(P_COEFF, I_COEFF, D_COEFF, F_COEFF);
         flywheelRight.setVelocityPIDFCoefficients(P_COEFF, I_COEFF, D_COEFF, F_COEFF);
 
+
+
+        Pose2d beginPose = new Pose2d(new Vector2d(70, 10), Math.toRadians(180));
+        MecanumDrive drive = new MecanumDrive(hardwareMap, beginPose);
+
         indexer.setPosition(0.5);
 
 
-        Pose2d beginPose = new Pose2d(new Vector2d(-50, -50), Math.toRadians(225));
-        MecanumDrive drive = new MecanumDrive(hardwareMap, beginPose);
-
-
         // ===== TRAJECTORY (UNCHANGED) =====
-        Action BANEAutonRed = drive.actionBuilder(beginPose)
-                .stopAndAdd(new IntakeOn())
-                .strafeTo(new Vector2d(-16, -16))
-                .stopAndAdd(new ThreeBallShoot())
-                .turnTo(Math.toRadians(270))
+        Action BANEAuton = drive.actionBuilder(beginPose)
 
-                .splineTo(new Vector2d(-4, -34), Math.toRadians(270))
-                .stopAndAdd(new IntakeOn())
-                .lineToY(-77)
-                .waitSeconds(0.500)
-                .lineToY(-40)
-
-                .splineToConstantHeading(new Vector2d(-16, -16), Math.toRadians(180))
-                .turnTo(Math.toRadians(225))
-                .stopAndAdd(new IntakeOff())
+                .turnTo(Math.toRadians(-215))
                 .stopAndAdd(new ThreeBallShoot())
 
-                .splineTo(new Vector2d(15, -34), Math.toRadians(270))
+                .splineTo(new Vector2d(35, 22), Math.toRadians(-270))
                 .stopAndAdd(new IntakeOn())
-                .lineToY(-80)
-                .lineToY(-40)
+                .lineToY(70)
+                .lineToY(40)
 
-                .splineToConstantHeading(new Vector2d(-16, -16), Math.toRadians(180))
-                .turnTo(Math.toRadians(225))
-                .stopAndAdd(new IntakeOff())
-                .stopAndAdd(new ThreeBallShoot())
-
-                .splineTo(new Vector2d(-7, -35), Math.toRadians(270))
+                .splineToConstantHeading(new Vector2d(35, 22), Math.toRadians(-270))
+                .turnTo(Math.toRadians(-215))
+                .strafeTo(new Vector2d(70, 10))
 
                 .build();
 
 
         waitForStart();
 
-        Actions.runBlocking(new SequentialAction(
-                BANEAutonRed
-        ));
 
+        Actions.runBlocking(new SequentialAction(
+                BANEAuton
+        ));
     }
 }
 
